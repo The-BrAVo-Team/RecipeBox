@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+            <h2>Login</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {{ form.username.label }} {{ form.username(size=20) }}
+            {{ form.password.label }} {{ form.password(size=20) }}
+            {{ form.submit }}
+        </form>
+        <p>Don't have an account, We got you! <a href="{{ url_for('register') }}">Sign up here</a>.</p>
+    </div>
+</body>
+</html>

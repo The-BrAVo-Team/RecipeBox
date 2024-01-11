@@ -1,0 +1,102 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  color: #343a40;
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.5s;
+}
+
+.alert {
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.8s;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+input {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  opacity: 0;
+  animation: fadeIn 1s forwards 1.1s;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 1s forwards 1.4s;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+  opacity: 0;
+  animation: fadeIn 1s forwards 1.7s;
+  transition: color 0.3s;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
