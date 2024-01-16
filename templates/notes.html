@@ -3,25 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Page</title>
+    <title>Recipe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="container">
-    <h2>Recipe Page</h2>
-    
-    <form method="POST" action="{{ url_for('add_note') }}">
-        {{ form.csrf_token }}
-        
-        <label for="note_title">Title:</label>
-        <input type="text" id="note_title" name="note_title" required>
-
-        <label for="note_content">Content:</label>
-        <textarea id="note_content" name="note_content" rows="4" required></textarea>
-
-        <button type="submit">Add Recipe</button>
-    </form>
+    <h2>My Recipe</h2>
 
     <div class="notes">
         {% for note in user.notes %}

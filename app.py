@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
+from flask import request
 import os
 
 app = Flask(__name__)
@@ -40,6 +41,15 @@ class DashboardForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Save')
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+# Add the following relationship to the User model
+User.notes = db.relationship('Note', backref='user', lazy=True)
 
 def encrypt_data(data):
     return cipher_suite.encrypt(data.encode())
@@ -90,7 +100,18 @@ def dashboard():
         flash('User not found!', 'danger')
         return redirect(url_for('dashboard'))
 
+    if request.method == 'POST' and form.validate_on_submit():
+        new_note = Note(title=form.note_title.data, content=form.note_content.data, user_id=user.id)
+        db.session.add(new_note)
+        db.session.commit()
+
     return render_template('dashboard.html', form=form)
+
+# Add a new route to handle displaying notes
+@app.route('/notes')
+def notes():
+    user = User.query.filter_by(username='example_user').first()
+    return render_template('notes.html', user=user)
 
 if __name__ == '__main__':
     app.run(debug=True)
