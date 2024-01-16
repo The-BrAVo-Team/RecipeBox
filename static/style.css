@@ -72,7 +72,7 @@ input {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #77312B;
   color: #fff;
   padding: 15px;
   border: none;
@@ -84,7 +84,7 @@ button {
 }
 
 button:hover {
-  background-color: #77312B;
+  background-color: #320e0b;
 }
 
 a {
