@@ -84,12 +84,12 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #77312B;
 }
 
 a {
   text-decoration: none;
-  color: #007bff;
+  color: #77312B;
   opacity: 0;
   animation: fadeIn 1s forwards 1.7s;
   transition: color 0.3s;
@@ -97,6 +97,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-  color: #0056b3;
+  color: #320e0b;
 }
 
