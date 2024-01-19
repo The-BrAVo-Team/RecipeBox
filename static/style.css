@@ -1,6 +1,6 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f8f9fa;
+  font-family: 'Lora', sans-serif;
+  background-color: #77312B;
   margin: 0;
   display: flex;
   justify-content: center;
@@ -37,6 +37,7 @@ form {
 }
 
 h2 {
+  font-family: 'Lobster', sans-serif;
   color: #343a40;
   opacity: 0;
   animation: fadeIn 1s forwards 0.5s;
