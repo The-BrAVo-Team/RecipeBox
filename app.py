@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, send_from_directory, render_template, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from flask import request, jsonify
 from flask_migrate import Migrate
@@ -10,7 +10,7 @@ from cryptography.fernet import Fernet
 from flask import request
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='client/build')
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
@@ -56,6 +56,10 @@ def encrypt_data(data):
 
 def decrypt_data(encrypted_data):
     return cipher_suite.decrypt(encrypted_data).decode()
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/')
 def home():
