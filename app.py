@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required
+from flask_login import login_user
 
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
@@ -99,8 +100,9 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user) 
             flash('Login successful!', 'success')
-            return redirect(url_for('dashboard.html'))
+            return redirect(url_for('dashboard'))
         else:
             flash('Login unsuccessful. Please check username and password.', 'danger')
     return render_template('login.html', form=form)
