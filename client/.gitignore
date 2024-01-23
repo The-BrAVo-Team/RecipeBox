@@ -24,7 +24,8 @@ yarn-error.log*
 
 
 # flask app
-/__pycache__
-/instance
-/migrations
+../__pycache__
+../instance
+../migrations
+../venv
 
