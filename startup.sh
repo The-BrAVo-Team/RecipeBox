@@ -1,4 +1,5 @@
-virtualenv .env && source .env/bin/activate && pip install -r requirements.txt
+python -m venv ./venv
+pip install -r requirements.txt
 python -m flask db init 
 python -m flask db migrate -m "Initial-migration"
 python -m flask db upgrade
