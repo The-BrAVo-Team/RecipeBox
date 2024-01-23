@@ -2,13 +2,12 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from flask import request, jsonify
 from flask_migrate import Migrate
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
-from flask import request
-import os
+from flask_login import current_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -26,6 +25,13 @@ class User(db.Model):
     password = db.Column(db.String(500), nullable=False)
     data = db.Column(db.Text, nullable=True)
 
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+User.notes = db.relationship('Note', backref='user', lazy=True)
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -42,14 +48,10 @@ class DashboardForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Save')
 
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-# Add the following relationship to the User model
-User.notes = db.relationship('Note', backref='user', lazy=True)
+class NoteForm(FlaskForm):
+    note_title = StringField('Title', validators=[DataRequired()])
+    note_content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Add Recipe')
 
 def encrypt_data(data):
     return cipher_suite.encrypt(data.encode())
@@ -92,20 +94,16 @@ def login():
     return render_template('login.html', form=form)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
-    form = DashboardForm()
-    user = User.query.filter_by(username=form.username.data).first()
-
-    if user is None:
-        flash('User not found!', 'danger')
-        return redirect(url_for('dashboard'))
+    form = NoteForm()
 
     if request.method == 'POST' and form.validate_on_submit():
-        new_note = Note(title=form.note_title.data, content=form.note_content.data, user_id=user.id)
+        new_note = Note(title=form.note_title.data, content=form.note_content.data, user_id=current_user.id)
         db.session.add(new_note)
         db.session.commit()
 
-    return render_template('dashboard.html', form=form)
+    return render_template('dashboard.html', form=form, user=current_user)
 
 # Add a new route to handle displaying notes
 @app.route('/notes')
