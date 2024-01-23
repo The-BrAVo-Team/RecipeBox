@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, send_from_directory, render_template, redirect, url_for, request, flash
 from flask_wtf import FlaskForm
 from flask import request, jsonify
 from flask_migrate import Migrate
@@ -10,7 +10,7 @@ from cryptography.fernet import Fernet
 from flask_login import current_user, login_required
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='client/build', template_folder= "templates")
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
@@ -53,6 +53,23 @@ def encrypt_data(data):
 
 def decrypt_data(encrypted_data):
     return cipher_suite.decrypt(encrypted_data).decode()
+
+
+# Route to serve React
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
+# Route to handle data requests and responses
+@app.route('/api/data')
+def get_data():
+    return {'data': 'Your data here'}
+
+
+#Flask route to send data to React
+@app.route('/api/sendData')
+def send_data():
+    return jsonify({'message': 'Data sent successfully'})
 
 @app.route('/')
 def home():
@@ -106,5 +123,19 @@ def notes():
     user = User.query.filter_by(username=form.username.data).first()
     return render_template('notes.html', user=user)
 
+# Serve React build files in Flask
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+# Flask error handling
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Not found'}), 404
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port = 3000)
