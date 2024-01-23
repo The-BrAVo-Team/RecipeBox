@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -41,12 +42,6 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
-
-class DashboardForm(FlaskForm):
-    app_name = StringField('Application Name', validators=[DataRequired()])
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Save')
 
 class NoteForm(FlaskForm):
     note_title = StringField('Title', validators=[DataRequired()])
@@ -88,13 +83,12 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             flash('Login successful!', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('dashboard.html'))
         else:
             flash('Login unsuccessful. Please check username and password.', 'danger')
     return render_template('login.html', form=form)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
 def dashboard():
     form = NoteForm()
 
@@ -108,7 +102,8 @@ def dashboard():
 # Add a new route to handle displaying notes
 @app.route('/notes')
 def notes():
-    user = User.query.filter_by(username='example_user').first()
+    form = Note()
+    user = User.query.filter_by(username=form.username.data).first()
     return render_template('notes.html', user=user)
 
 if __name__ == '__main__':

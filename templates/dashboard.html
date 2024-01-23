@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&family=Lora&display=swap" rel="stylesheet">
-    <title>Dashboard</title>
+    <title>New Recipe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -15,7 +15,7 @@
 <body>
 
 <div class="container">
-    <h2>Dashboard</h2>
+    <h2>New Recipe</h2>
     
     <form method="POST" action="{{ url_for('dashboard') }}">
         {{ form.csrf_token }}
@@ -40,4 +40,5 @@
 </div>
 
 </body>
+</html>
 
