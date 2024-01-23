@@ -1,4 +1,4 @@
-python -m venv ./venv && source ./venv/bin/activate
+python -m venv ./venv && source ./venv/Scripts/activate
 pip install -r requirements.txt
 python -m flask db init 
 python -m flask db migrate -m "Initial-migration"
