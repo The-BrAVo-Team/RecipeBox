@@ -9,7 +9,7 @@ from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required
 from flask_login import login_user
-
+import os
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -56,10 +56,6 @@ def decrypt_data(encrypted_data):
     return cipher_suite.decrypt(encrypted_data).decode()
 
 
-# Route to serve React
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
 
 # Route to handle data requests and responses
 @app.route('/api/data')
