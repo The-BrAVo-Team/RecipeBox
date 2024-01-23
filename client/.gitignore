@@ -23,9 +23,3 @@ yarn-debug.log*
 yarn-error.log*
 
 
-# flask app
-../__pycache__
-../instance
-../migrations
-../venv
-
