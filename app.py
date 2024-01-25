@@ -8,7 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required
-from flask_login import login_user
+from flask_login import login_user, login_manager
+from flask_login import LoginManager
 import os
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
@@ -115,11 +116,11 @@ def dashboard():
     return render_template('dashboard.html', form=form, user=current_user)
 
 # Add a new route to handle displaying notes
-@app.route('/notes')
+@app.route('/notes', methods=['GET', 'POST'])
 def notes():
-    form = Note()
-    user = User.query.filter_by(username=form.username.data).first()
-    return render_template('notes.html', user=user)
+    form = NoteForm()
+    user = User.query.filter_by(username=current_user.username).first()
+    return render_template('notes.html', user=user, form=form)
 
 # Serve React build files in Flask
 @app.route('/', defaults={'path': ''})
