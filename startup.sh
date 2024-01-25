@@ -1,8 +1,8 @@
-python -m venv ./venv && source ./venv/Scripts/activate
+python3 -m venv ./venv && source ./venv/Scripts/activate
 pip install -r requirements.txt
-python -m flask db init 
-python -m flask db migrate -m "Initial-migration"
-python -m flask db upgrade
+python3 -m flask db init 
+python3 -m flask db migrate -m "Initial-migration"
+python3 -m flask db upgrade
 cd client
 npm i 
 npm run build
