@@ -27,7 +27,7 @@
             {% endwith %}
             {{ form.username.label }} {{ form.username(size=20) }}
             {{ form.password.label }} {{ form.password(size=20) }}
-            {{ form.submit }}
+            <button type="submit">Login</button>
         </form>
         <p>Don't have an account? We got you! <a href="{{ url_for('register') }}">Sign up here</a>.</p>
     </div>
