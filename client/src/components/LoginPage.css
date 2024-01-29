@@ -1,0 +1,100 @@
+.container {
+  body {
+    font-family: 'Lora', sans-serif;
+    background-color: #f8f9fa; /* Light background color */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Increased max-width for a more spacious feel */
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    margin-top: 50px; /* Added margin for better positioning */
+  }
+  
+  @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px; /* Added margin for better spacing */
+  }
+  
+  h2 {
+    font-family: 'Lobster', sans-serif;
+    color: #343a40;
+    opacity: 0;
+    animation: fadeIn 1s forwards 0.5s;
+  }
+  
+  input, textarea {
+    margin: 10px 0; /* Adjusted margin for better spacing */
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 1s forwards 1.1s;
+  }
+  
+  button {
+    background-color: #77312B;
+    font-family: 'Lora', sans-serif;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 1s forwards 1.4s;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 15px; /* Added margin for better spacing */
+  }
+  
+  button:hover {
+    background-color: #320e0b;
+  }
+  
+  .notes {
+    margin-top: 40px; /* Added margin for better spacing between form and notes */
+  }
+  
+  .note {
+    background-color: #f8d7da; /* Light red background for notes */
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px; /* Added margin for better spacing between notes */
+  }
+  
+  a {
+    text-decoration: none;
+    color: #77312B;
+    opacity: 0;
+    animation: fadeIn 1s forwards 1.7s;
+    transition: color 0.3s;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+    color: #320e0b;
+  }
+}

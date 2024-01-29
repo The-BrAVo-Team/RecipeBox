@@ -1,0 +1,67 @@
+.landing-container {
+  background: url('/client/src/landinngPageBg.jpg') no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  color: white;
+  height: 100%;
+}
+
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+nav button {
+  background: none;
+  border: 1px solid white;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+}
+
+nav .signup-btn {
+  margin-left: 10px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.call-to-action {
+  text-align: center;
+}
+
+.call-to-action h2 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.start-cooking-btn {
+  font-size: 1.2em;
+  background-color: #ffc107;
+  color: black;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.start-cooking-btn:hover {
+  background-color: #e0a800;
+}
