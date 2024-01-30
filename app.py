@@ -129,11 +129,11 @@ def dashboard():
     return render_template('dashboard.html', form=form, user=current_user)
 
 # Add a new route to handle displaying notes
-@app.route('/notes')
+@app.route('/notes', methods=['GET', 'POST'])
 def notes():
-    form = Note()
-    user = User.query.filter_by(username=form.username.data).first()
-    return render_template('notes.html', user=user)
+    form = NoteForm()
+    user = User.query.filter_by(username=current_user.username).first()
+    return render_template('notes.html', user=user, form=form)
 
 # Serve React build files in Flask
 @app.route('/', defaults={'path': ''})

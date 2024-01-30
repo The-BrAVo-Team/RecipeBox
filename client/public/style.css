@@ -8,6 +8,16 @@ body {
   min-height: 100vh;
 }
 
+.table {
+    background-image: url('table.jpg');
+    background-repeat: no-repeat;
+}
+
+.garlic {
+    background-image: url('garlic.jpg');
+    background-repeat: no-repeat;
+}
+
 .container {
   background-color: #ffffff;
   padding: 30px;
@@ -75,6 +85,8 @@ input {
 button {
   background-color: #77312B;
   color: #fff;
+  font-family: 'Lobster', sans-serif;
+  font-size: medium;
   padding: 15px;
   border: none;
   border-radius: 8px;
