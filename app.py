@@ -71,8 +71,7 @@ def send_data():
 
 @app.route('/')
 def home():
-    form = LoginForm()
-    return render_template('login.html', form=form)
+    return render_template('landingpage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
