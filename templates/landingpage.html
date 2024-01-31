@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Grandma's Recipe Box</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Grandma's Recipe Box</title>
+  <!-- Load React and ReactDOM from CDN -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <!-- Load Babel for in-browser JSX transformation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-    <div class="container">
+  <div id="root"></div>
+  <script type="text/babel">
+    //I placed the React code here using JSX
+    const App = () => (
+      <div className="container">
         <h1>Grandma's Recipe Box</h1>
         <p>Find & Share Great Recipes with Ease</p>
-        <a href="{{ url_for('login') }}" class="btn-start">Start Cooking!</a>
-    </div>
+        <button onClick={() => window.location.href="{{ url_for('login') }}"}>Start Cooking!</button>
+      </div>
+    );
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
 </body>
 </html>
+
