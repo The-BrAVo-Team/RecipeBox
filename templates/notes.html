@@ -3,23 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Lora&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <title>My Recipes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <nav class="react-nav"></nav>
+    <main class="wood">
+    <div class="container">
+        <h2>My Recipes</h2>
 
-<div class="container">
-    <h2>My Recipes</h2>
-
-    <div class="notes">
-        {% for note in user.notes %}
-            <div class="note">
-                <h3>{{ note.title }}</h3>
-                <p>{{ note.content }}</p>
-            </div>
-        {% endfor %}
+        <div class="notes">
+            {% for note in user.notes %}
+                <div class="note">
+                    <h3>{{ note.title }}</h3>
+                    <p>{{ note.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-
+    </main>
+    <script type="text/babel">
+        class App extends React.Component {
+            render() {
+                return(
+                    <div class="navbar">
+                        <a href="#">Home</a>
+                        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a href="#">My Recipes</a>
+                    </div>
+                );
+            }
+        }
+        ReactDOM.render(<App />, document.querySelector(".react-nav"));
+    </script>
 </body>
 </html>
