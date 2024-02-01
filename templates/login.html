@@ -22,8 +22,8 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            {{ form.username.label }} {{ form.username(size=20) }}
-            {{ form.password.label }} {{ form.password(size=20) }}
+            {{ form.username.label }} {{ form.username(size=20, autocomplete="off") }}
+            {{ form.password.label }} {{ form.password(size=20, autocomplete="off") }}
             <button type="submit">Login</button>
         </form>
         <p>Don't have an account? We got you! <a href="{{ url_for('register') }}">Sign up here</a>.</p>
