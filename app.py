@@ -7,9 +7,7 @@ from wtforms.validators import DataRequired, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
-from flask_login import current_user, login_required
-from flask_login import login_user, login_manager
-from flask_login import LoginManager
+from flask_login import current_user, login_required, login_user, LoginManager
 import os
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
@@ -21,12 +19,20 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cipher_suite = Fernet(Fernet.generate_key())
 
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(500), unique=True, nullable=False)
     password = db.Column(db.String(500), nullable=False)
     data = db.Column(db.Text, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
+    is_authenticated = db.Column(db.Boolean, default=True)
+    is_anonymous = db.Column(db.Boolean, default=False)
+    def get_id(self):
+        return self.id
+
+    
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +61,13 @@ def encrypt_data(data):
 
 def decrypt_data(encrypted_data):
     return cipher_suite.decrypt(encrypted_data).decode()
+
+with app.app_context():
+    db.create_all()
+    
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "/login"
 
 
 
@@ -135,8 +148,14 @@ def catch_all(path):
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404
 
+
 with app.app_context():
     db.create_all()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port = 3000)

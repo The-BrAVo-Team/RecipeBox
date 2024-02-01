@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Lora&display=swap" rel="stylesheet">
     <title>Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="garlic">
+<body>
+    <main class="garlic">
     <div class="container">
         <form method="POST" action="">
             {{ form.csrf_token }}
@@ -25,12 +22,13 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            {{ form.username.label }} {{ form.username(size=20) }}
-            {{ form.password.label }} {{ form.password(size=20) }}
+            {{ form.username.label }} {{ form.username(size=20, autocomplete="off") }}
+            {{ form.password.label }} {{ form.password(size=20, autocomplete="off") }}
             <button type="submit">Sign Up!</button>
 
         </form>
         <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
     </div>
+</main>
 </body>
 </html>

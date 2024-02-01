@@ -1,4 +1,10 @@
 body {
+    font-family: 'Lora', sans-serif;
+    background-color: #77312B;
+    margin: 0;
+}
+
+main {
   font-family: 'Lora', sans-serif;
   background-color: #77312B;
   margin: 0;
@@ -15,6 +21,16 @@ body {
 
 .garlic {
     background-image: url('garlic.jpg');
+    background-repeat: no-repeat;
+}
+
+.wood {
+    background-image: url('wood.jpg');
+    background-repeat: no-repeat;
+}
+
+.gingham {
+    background-image: url('gingham.jpg');
     background-repeat: no-repeat;
 }
 
@@ -51,6 +67,16 @@ h2 {
   color: #343a40;
   opacity: 0;
   animation: fadeIn 1s forwards 0.5s;
+}
+
+textarea {
+    resize: none;
+    margin: 15px 0;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 1s forwards 1.1s;
 }
 
 .alert {
@@ -109,7 +135,32 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
   color: #320e0b;
 }
 
+/* The navigation bar */
+.navbar {
+    overflow: hidden;
+    background-color: #320e0b;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+}
+  
+/* Links inside the navbar */
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 26px;
+    text-decoration: none;
+}
+  
+/* Change background on mouse-over */
+.navbar a:hover {
+    background: #77312B;
+    color: #f2f2f2;
+    text-decoration: none;
+}
