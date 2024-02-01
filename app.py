@@ -84,8 +84,7 @@ def send_data():
 
 @app.route('/')
 def home():
-    form = LoginForm()
-    return render_template('login.html', form=form)
+    return render_template('landingpage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -149,9 +148,14 @@ def catch_all(path):
 def not_found(error):
     return jsonify({'error': 'Not found'}), 404
 
+
+with app.app_context():
+    db.create_all()
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port = 3000)

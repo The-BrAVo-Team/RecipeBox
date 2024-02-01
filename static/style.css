@@ -72,6 +72,23 @@ button:hover {
   background-color: #320e0b;
 }
 
+.btn-start {
+  background-color: #77312B; /* Or any color that fits the theme from your image */
+  color: #fff;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none; /* This is important since .btn-start is used on an anchor tag */
+  display: inline-block; /* To apply padding and centering */
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 15px;
+}
+
+.btn-start:hover {
+  background-color: #320e0b;
+}
+
 .notes {
   margin-top: 40px; /* Added margin for better spacing between form and notes */
 }
