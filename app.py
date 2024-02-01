@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required, login_user, LoginManager
+from flask_login import logout_user
 import os
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
@@ -85,6 +86,13 @@ def send_data():
 @app.route('/')
 def home():
     return render_template('landingpage.html')
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

@@ -34,6 +34,15 @@ main {
     background-repeat: no-repeat;
 }
 
+.tomatoes {
+  background-image: url('');
+  background-repeat: no-repeat;
+}
+
+.logout-link{
+  float: left;
+}
+
 .container {
   background-color: #ffffff;
   padding: 30px;
