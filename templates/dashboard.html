@@ -42,21 +42,21 @@
         </div>
     </main>
 
-<script type="text/babel">
-    class App extends React.Component {
-        render() {
-            return(
-                <div class="navbar">
-                    <a href="#">Home</a>
-                    <a href="#">Dashboard</a>
-                    <a href="{{ url_for('notes') }}">My Recipes</a>
-                    <a href="#">Log Out</a>
-                </div>
-            );
+    <script type="text/babel">
+        class App extends React.Component {
+            render() {
+                return(
+                    <div class="navbar">
+                        <a href="#">Home</a>
+                        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('notes') }}">My Recipes</a>
+                        <a href="{{ url_for('logout') }}">Log Out</a>
+                    </div>
+                );
+            }
         }
-    }
-    ReactDOM.render(<App />, document.querySelector(".react-nav"));
-</script>
+        ReactDOM.render(<App />, document.querySelector(".react-nav"));
+    </script>    
 </body>
 </html>
 

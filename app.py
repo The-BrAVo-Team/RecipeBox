@@ -1,5 +1,6 @@
-from flask import Flask, send_from_directory, render_template, redirect, url_for, request, flash
+from flask import Flask, send_from_directory, render_template, redirect, url_for, request
 from flask_wtf import FlaskForm
+from flask import flash
 from flask import request, jsonify
 from flask_migrate import Migrate
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField
@@ -87,13 +88,6 @@ def send_data():
 def home():
     return render_template('landingpage.html')
 
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     username = request.form.get('username')
@@ -123,6 +117,13 @@ def login():
         else:
             flash('Login unsuccessful. Please check username and password.', 'danger')
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('home'))  # This should redirect to the landing page
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
