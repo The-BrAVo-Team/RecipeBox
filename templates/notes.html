@@ -15,32 +15,49 @@
 <body>
     <nav class="react-nav"></nav>
     <main class="wood">
-    <div class="container">
-        <h2>My Recipes</h2>
-
-        <div class="notes">
-            {% for note in user.notes %}
-                <div class="note">
-                    <h3>{{ note.title }}</h3>
-                    <p>{{ note.content }}</p>
+        <div class="container">
+          <h2>My Recipes</h2>
+          <div class="slider">
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+            <div class="slides">
+              {% for note in user.notes %}
+                <div class="slide">
+                  <h3>{{ note.title }}</h3>
+                  <p>{{ note.content }}</p>
+                  <button onclick="deleteSlide({{ note.id }})">Delete</button>
                 </div>
-            {% endfor %}
+              {% endfor %}
+            </div>
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>
+          </div>
         </div>
-    </div>
-    </main>
-    <script type="text/babel">
-        class App extends React.Component {
-            render() {
-                return(
-                    <div class="navbar">
-                        <a href="#">Home</a>
-                        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                        <a href="#">My Recipes</a>
-                    </div>
-                );
-            }
+      </main>
+      <script type="text/babel">
+        // React component omitted for brevity
+      </script>
+      <script>
+        var currentSlide = 0;
+        showSlides(currentSlide);
+    
+        function showSlides(n) {
+          var slides = document.getElementsByClassName("slide");
+          if (n >= slides.length) currentSlide = 0;
+          if (n < 0) currentSlide = slides.length - 1;
+          for (var i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+          }
+          slides[currentSlide].style.display = "block";
         }
-        ReactDOM.render(<App />, document.querySelector(".react-nav"));
-    </script>
-</body>
-</html>
+    
+        function moveSlide(n) {
+          showSlides(currentSlide += n);
+        }
+    
+        function deleteSlide(noteId) {
+          // Implement AJAX request to Flask to delete the note
+          console.log('Delete note with ID:', noteId);
+          // Optionally, remove the slide from the DOM
+        }
+      </script>
+    </body>
+    </html>

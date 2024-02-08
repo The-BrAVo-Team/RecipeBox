@@ -93,6 +93,15 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/delete_note/<int:note_id>', methods=['POST'])
+def delete_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        return jsonify({'error': 'Permission denied'}), 403
+    db.session.delete(note)
+    db.session.commit()
+    return jsonify({'success': 'Note deleted'}), 200
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

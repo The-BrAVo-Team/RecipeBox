@@ -43,6 +43,53 @@ main {
   float: left;
 }
 
+/* Style the slider container */
+.slider {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Hide the slides by default */
+.slide {
+  display: none;
+}
+
+/* Style the prev & next buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the prev button */
+.prev {
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* Position the next button */
+.next {
+  right: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+/* Show the first slide by default */
+.slide:first-child {
+  display: block;
+}
+
+
 .container {
   background-color: #ffffff;
   padding: 30px;
