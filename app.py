@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory, render_template, redirect, url_for, request
+from wtforms.validators import ValidationError, StopValidation
 from flask_wtf import FlaskForm
 from flask import flash
 from flask import request, jsonify
@@ -11,6 +12,7 @@ from cryptography.fernet import Fernet
 from flask_login import current_user, login_required, login_user, LoginManager
 from flask_login import logout_user
 import os
+import re
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -43,9 +45,36 @@ class Note(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 User.notes = db.relationship('Note', backref='user', lazy=True)
 
+class PasswordComplexity(object):
+    def __init__(self, message=None):
+        if not message:
+            message = u'Password must include at least one lowercase letter, one uppercase letter, one digit, and one special character.'
+        self.message = message
+
+    def __call__(self, form, field):
+        password = field.data
+        if not re.search("[a-z]", password):
+            raise ValidationError(self.message)
+        elif not re.search("[A-Z]", password):
+            raise ValidationError(self.message)
+        elif not re.search("[0-9]", password):
+            raise ValidationError(self.message)
+        elif not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
+            raise ValidationError(self.message)
+
+def check_common_password(form, field):
+    common_passwords = ["password", "123456", "12345678"] # TODO: Add more common passwords to list
+    if field.data in common_passwords:
+        raise ValidationError("Please use a stronger, less common password.")
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+        Length(min=8, message="Password must be at least 8 characters long."),
+        PasswordComplexity(),
+        check_common_password
+    ])
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
