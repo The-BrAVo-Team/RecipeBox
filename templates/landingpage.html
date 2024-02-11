@@ -30,7 +30,7 @@
                 return(
                     <div class="navbar">
                         <a href="#">Home</a>
-                        <a href="#">Dashboard</a>
+                        <a href="{{ url_for('dashboard') }}">Dashboard</a>
                         <a href="{{ url_for('notes') }}">My Recipes</a>
                     </div>
                 );
