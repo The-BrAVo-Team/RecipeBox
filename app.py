@@ -11,6 +11,8 @@ from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required, login_user, LoginManager
 from flask_login import logout_user
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 import re
 
@@ -23,6 +25,12 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cipher_suite = Fernet(Fernet.generate_key())
 
+# Initialize Flask-Limiter
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -118,6 +126,7 @@ def home():
     return render_template('landingpage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def register():
     username = request.form.get('username')
 
@@ -135,6 +144,7 @@ def register():
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute") # If error message does not display, add this to limit() => error_message="Too many attempts, please try again later."
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -146,6 +156,15 @@ def login():
         else:
             flash('Login unsuccessful. Please check username and password.', 'danger')
     return render_template('login.html', form=form)
+
+@limiter.request_filter
+def limiter_request_filter():
+    # Return True if the limit should not be enforced for the request
+    return request.method == 'OPTIONS'
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return jsonify(error="Rate limit exceeded. %s" % e.description, 429)
 
 @app.route('/logout')
 def logout():
