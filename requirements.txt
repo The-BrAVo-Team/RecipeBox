@@ -13,6 +13,7 @@ Flask-Migrate==4.0.5
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.1
 Flask-Limiter
+Flask-Admin
 greenlet==3.0.3
 is-disposable-email==1.0.0
 itsdangerous==2.1.2
