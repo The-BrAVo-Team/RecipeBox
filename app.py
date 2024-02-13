@@ -27,7 +27,7 @@ cipher_suite = Fernet(Fernet.generate_key())
 
 # Initialize Flask-Limiter
 limiter = Limiter(
-    app,
+    app=app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
 )
@@ -164,7 +164,7 @@ def limiter_request_filter():
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
-    return jsonify(error="Rate limit exceeded. %s" % e.description, 429)
+    return jsonify(error="Rate limit exceeded. %s" % e.description)
 
 @app.route('/logout')
 def logout():
