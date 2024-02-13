@@ -126,6 +126,7 @@ def logout():
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
     form = NoteForm()
 
@@ -138,6 +139,7 @@ def dashboard():
 
 # Add a new route to handle displaying notes
 @app.route('/notes', methods=['GET', 'POST'])
+@login_required
 def notes():
     form = NoteForm()
     user = User.query.filter_by(username=current_user.username).first()
