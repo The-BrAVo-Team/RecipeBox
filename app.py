@@ -13,6 +13,8 @@ from flask_login import current_user, login_required, login_user, LoginManager
 from flask_login import logout_user
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 import os
 import re
 
@@ -24,6 +26,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cipher_suite = Fernet(Fernet.generate_key())
+
+admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 
 # Initialize Flask-Limiter
 limiter = Limiter(
@@ -41,6 +45,8 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     is_authenticated = db.Column(db.Boolean, default=True)
     is_anonymous = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    role =  db.Column(db.String(50))
     def get_id(self):
         return self.id
 
@@ -108,6 +114,30 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "/login"
 
+class UserModelView(ModelView):
+    column_exclude_list = ['password', 'data']
+    form_excluded_columns = ['password', 'data']
+    can_create = False # This line disables the admins ability to create extra users from the backend
+    can_delete = True
+    column_editable_list = ['username', 'is_active', 'role']
+    column_list = ['id', 'username', 'is_active', 'is_admin']
+    column_searchable_list = ['username']
+    column_editable_list = ['is_active', 'is_admin']
+    form_columns = ['username', 'is_active', 'is_admin']
+
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+    
+    def inaccessible_callback(self, name, **kwargs):
+        # Redirect to login page if user is not logged in or not an admin
+        if not current_user.is_authenticated:
+            return redirect(url_for('login', next=request.url))
+        # Optionally, show a custom unauthorized message or redirect
+        return redirect(url_for('home')) 
+    
+
+admin.add_view(UserModelView(User, db.session))
+admin.add_view(ModelView(Note, db.session))
 
 
 # Route to handle data requests and responses
