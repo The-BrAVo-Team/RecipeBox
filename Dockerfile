@@ -2,7 +2,7 @@
 FROM node:14-alpine
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /RecipeBox
 
 # Copy Python requirements file
 COPY requirements.txt .
@@ -17,7 +17,7 @@ RUN apk add --no-cache python3 py3-pip \
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application files
-COPY ./client/package-lock.json /app/client/package-lock.json
+COPY ./client/package-lock.json /RecipeBox/client/package-lock.json
 
 # Install Node.js dependencies
 RUN (cd client; npm install)
