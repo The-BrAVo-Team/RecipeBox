@@ -1,5 +1,4 @@
 from flask import Flask, send_from_directory, render_template, redirect, url_for, request
-from wtforms.validators import ValidationError, StopValidation
 from flask_wtf import FlaskForm
 from flask import flash
 from flask import request, jsonify
@@ -11,12 +10,7 @@ from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
 from flask_login import current_user, login_required, login_user, LoginManager
 from flask_login import logout_user
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 import os
-import re
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -27,14 +21,6 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cipher_suite = Fernet(Fernet.generate_key())
 
-admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
-
-# Initialize Flask-Limiter
-limiter = Limiter(
-    app=app,
-    key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]
-)
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -45,8 +31,6 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     is_authenticated = db.Column(db.Boolean, default=True)
     is_anonymous = db.Column(db.Boolean, default=False)
-    is_admin = db.Column(db.Boolean, default=False)
-    role =  db.Column(db.String(50))
     def get_id(self):
         return self.id
 
@@ -59,36 +43,9 @@ class Note(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 User.notes = db.relationship('Note', backref='user', lazy=True)
 
-class PasswordComplexity(object):
-    def __init__(self, message=None):
-        if not message:
-            message = u'Password must include at least one lowercase letter, one uppercase letter, one digit, and one special character.'
-        self.message = message
-
-    def __call__(self, form, field):
-        password = field.data
-        if not re.search("[a-z]", password):
-            raise ValidationError(self.message)
-        elif not re.search("[A-Z]", password):
-            raise ValidationError(self.message)
-        elif not re.search("[0-9]", password):
-            raise ValidationError(self.message)
-        elif not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
-            raise ValidationError(self.message)
-
-def check_common_password(form, field):
-    common_passwords = ["password", "123456", "12345678"] # TODO: Add more common passwords to list
-    if field.data in common_passwords:
-        raise ValidationError("Please use a stronger, less common password.")
-
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('Password', validators=[
-        DataRequired(),
-        Length(min=8, message="Password must be at least 8 characters long."),
-        PasswordComplexity(),
-        check_common_password
-    ])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
@@ -114,30 +71,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "/login"
 
-class UserModelView(ModelView):
-    column_exclude_list = ['password', 'data']
-    form_excluded_columns = ['password', 'data']
-    can_create = False # This line disables the admins ability to create extra users from the backend
-    can_delete = True
-    column_editable_list = ['username', 'is_active', 'role']
-    column_list = ['id', 'username', 'is_active', 'is_admin']
-    column_searchable_list = ['username']
-    column_editable_list = ['is_active', 'is_admin']
-    form_columns = ['username', 'is_active', 'is_admin']
-
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.is_admin
-    
-    def inaccessible_callback(self, name, **kwargs):
-        # Redirect to login page if user is not logged in or not an admin
-        if not current_user.is_authenticated:
-            return redirect(url_for('login', next=request.url))
-        # Optionally, show a custom unauthorized message or redirect
-        return redirect(url_for('home')) 
-    
-
-admin.add_view(UserModelView(User, db.session))
-admin.add_view(ModelView(Note, db.session))
 
 
 # Route to handle data requests and responses
@@ -156,7 +89,6 @@ def home():
     return render_template('landingpage.html')
 
 @app.route('/register', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
 def register():
     username = request.form.get('username')
 
@@ -174,7 +106,6 @@ def register():
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute") # If error message does not display, add this to limit() => error_message="Too many attempts, please try again later."
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -186,15 +117,6 @@ def login():
         else:
             flash('Login unsuccessful. Please check username and password.', 'danger')
     return render_template('login.html', form=form)
-
-@limiter.request_filter
-def limiter_request_filter():
-    # Return True if the limit should not be enforced for the request
-    return request.method == 'OPTIONS'
-
-@app.errorhandler(429)
-def ratelimit_handler(e):
-    return jsonify(error="Rate limit exceeded. %s" % e.description)
 
 @app.route('/logout')
 def logout():
