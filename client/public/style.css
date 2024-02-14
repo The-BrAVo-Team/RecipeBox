@@ -17,26 +17,31 @@ main {
 .table {
     background-image: url('table.jpg');
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .garlic {
     background-image: url('garlic.jpg');
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .wood {
     background-image: url('wood.jpg');
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .gingham {
     background-image: url('gingham.jpg');
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .tomatoes {
   background-image: url('tomatoes.jpg');
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .logout-link{
