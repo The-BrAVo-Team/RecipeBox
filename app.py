@@ -1,16 +1,14 @@
-from flask import Flask, send_from_directory, render_template, redirect, url_for, request
+from flask import Flask, send_from_directory, render_template, redirect, url_for, request, flash, jsonify
 from flask_wtf import FlaskForm
-from flask import flash
-from flask import request, jsonify
 from flask_migrate import Migrate
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, ValidationError
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from cryptography.fernet import Fernet
-from flask_login import current_user, login_required, login_user, LoginManager
-from flask_login import logout_user
+from flask_login import current_user, login_required, login_user, LoginManager, logout_user
 import os
+import re
 
 app = Flask(__name__, static_folder='client/build', template_folder= "templates")
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -20,6 +18,24 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 cipher_suite = Fernet(Fernet.generate_key())
+
+def password_complexity(form, field):
+    password = field.data
+    if len(password) < 8:
+        raise ValidationError('Password must be at least 8 characters long.')
+    if not re.search("[a-z]", password):
+        raise ValidationError('Password must include at least one lowercase letter.')
+    if not re.search("[A-Z]", password):
+        raise ValidationError('Password must include at least one uppercase letter.')
+    if not re.search("[0-9]", password):
+        raise ValidationError('Password must include at least one digit.')
+    if not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
+        raise ValidationError('Password must include at least one special character.')
+
+def check_common_password(form, field):
+    common_passwords = ["password", "123456", "12345678", "qwerty", "abc123"]
+    if field.data in common_passwords:
+        raise ValidationError("The password is too common. Please use a stronger password.")
 
 
 class User(db.Model):
@@ -45,7 +61,11 @@ User.notes = db.relationship('Note', backref='user', lazy=True)
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+        password_complexity,  # Apply the custom password complexity validator
+        check_common_password  # Check against common passwords
+    ])
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
@@ -91,11 +111,12 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     username = request.form.get('username')
+    form = RegistrationForm()
 
     if db.session.query(User).filter_by(username=username).first():
-        return jsonify({'error': 'Username already exists'}), 400
-    
-    form = RegistrationForm()
+        flash('Username already exists.', 'danger')
+        return render_template('register.html', form=form)
+
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, password=hashed_password, data='{}')
@@ -103,6 +124,11 @@ def register():
         db.session.commit()
         flash('Your account has been created!', 'success')
         return redirect(url_for('login'))
+    else:
+        for fieldName, errorMessages in form.errors.items():
+            for err in errorMessages:
+                flash(f"{fieldName}: {err}", 'danger')
+    
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
