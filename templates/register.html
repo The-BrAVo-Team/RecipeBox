@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Lora&display=swap" rel="stylesheet">
     <title>Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <main class="garlic">
@@ -30,5 +31,12 @@
         <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
     </div>
 </main>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $(".alert").fadeOut("slow");
+        }, 3000); // Hides the flash message after 1 second
+    });
+    </script>
 </body>
 </html>
