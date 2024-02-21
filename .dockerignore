@@ -1,0 +1,7 @@
+# flask app
+/__pycache__/
+
+/migrations/
+/venv/
+
+.env
