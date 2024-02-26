@@ -23,6 +23,7 @@
                 <div class="note">
                     <h3>{{ note.title }}</h3>
                     <p>{{ note.content }}</p>
+                    <button onclick="deleteNote({{note.id}})">Delete</button>
                 </div>
             {% endfor %}
         </div>
@@ -42,6 +43,21 @@
             }
         }
         ReactDOM.render(<App />, document.querySelector(".react-nav"));
+        function deleteNote(noteId) {
+        fetch('/delete_note/' + noteId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({}),
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload(); // Reload the page to reflect the changes
+            } else {
+                alert('Failed to delete the recipe.');
+            }
+        });
+    }
     </script>
 </body>
 </html>

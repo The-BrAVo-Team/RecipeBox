@@ -171,6 +171,19 @@ def notes():
     user = User.query.filter_by(username=current_user.username).first()
     return render_template('notes.html', user=user, form=form)
 
+@app.route('/delete_note/<int:note_id>', methods=['POST'])
+@login_required
+def delete_note(note_id):
+    note_to_delete = Note.query.get_or_404(note_id)
+    if note_to_delete.user_id != current_user.id:
+        flash('You do not have permission to delete this recipe.', 'danger')
+        return redirect(url_for('notes'))
+    db.session.delete(note_to_delete)
+    db.session.commit()
+    flash('Recipe deleted successfully!', 'success')
+    return redirect(url_for('notes'))
+
+
 # Serve React build files in Flask
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
