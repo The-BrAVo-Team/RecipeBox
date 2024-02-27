@@ -14,7 +14,7 @@ RUN apk add --no-cache python3 py3-pip \
 
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the rest of the application files
 COPY ./client/package-lock.json /RecipeBox/client/package-lock.json
