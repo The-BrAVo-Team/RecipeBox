@@ -14,9 +14,6 @@ RUN apk add --no-cache python3 py3-pip \
 
 
 # Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip setuptools
-RUN python3 -m venv /venv
-RUN . /venv/bin/activate
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application files
