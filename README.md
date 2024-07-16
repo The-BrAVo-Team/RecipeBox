@@ -7,7 +7,7 @@ Welcome to Grandma's Recipe Box, a delightful recipe storage app brought to you 
 - **User Accounts**: Create your own account to save and access your recipes from anywhere.
 - **Recipe Storage**: Easily store and organize your recipes in one convenient location.
 - **User-Friendly Interface**: Our intuitive interface makes it easy to add, edit, and manage your recipes.
-- **Sharing Options**: Share your favorite recipes with friends and family with just a few clicks.
+- **Sharing Options**: Share your favorite recipes with friends and family with just a few clicks. 
 
 ## How to Use
 
